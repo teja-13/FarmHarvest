@@ -601,6 +601,7 @@
             
             // Create a function to determine soil quality level
             function getQualityClass(value, low, medium, high) {
+                value = Number(value) || 0;
                 if (value < low) return 'text-danger';
                 if (value < medium) return 'text-warning';
                 if (value < high) return 'text-success';
@@ -610,31 +611,31 @@
             // Format the soil summary
             soilSummary.innerHTML = `
                 <h5>${soilData.location || 'Your Field'}</h5>
-                <p class="text-muted mb-3">Area: ${soilData.landArea} acres</p>
+                <p class="text-muted mb-3">Area: ${soilData.area || soilData.landArea || '1'} acres</p>
                 
                 <h6>Macronutrients</h6>
                 <div class="row g-2 mb-3">
                     <div class="col-4">
                         <div class="card bg-light">
                             <div class="card-body p-2 text-center">
-                                <h6 class="mb-0 ${getQualityClass(soilData.nitrogen, 40, 80, 120)}">N</h6>
-                                <small>${soilData.nitrogen} kg/ha</small>
+                                <h6 class="mb-0 ${getQualityClass(soilData.N || 0, 40, 80, 120)}">N</h6>
+                                <small>${soilData.N || 0} kg/ha</small>
                             </div>
                         </div>
                     </div>
                     <div class="col-4">
                         <div class="card bg-light">
                             <div class="card-body p-2 text-center">
-                                <h6 class="mb-0 ${getQualityClass(soilData.phosphorus, 20, 40, 60)}">P</h6>
-                                <small>${soilData.phosphorus} kg/ha</small>
+                                <h6 class="mb-0 ${getQualityClass(soilData.P || 0, 20, 40, 60)}">P</h6>
+                                <small>${soilData.P || 0} kg/ha</small>
                             </div>
                         </div>
                     </div>
                     <div class="col-4">
                         <div class="card bg-light">
                             <div class="card-body p-2 text-center">
-                                <h6 class="mb-0 ${getQualityClass(soilData.potassium, 30, 60, 90)}">K</h6>
-                                <small>${soilData.potassium} kg/ha</small>
+                                <h6 class="mb-0 ${getQualityClass(soilData.K || 0, 30, 60, 90)}">K</h6>
+                                <small>${soilData.K || 0} kg/ha</small>
                             </div>
                         </div>
                     </div>
@@ -749,9 +750,9 @@
             
             doc.setFontSize(12);
             doc.text(`Location: ${soilData.location || 'Your Field'}`, 20, 50);
-            doc.text(`Land Area: ${soilData.landArea} acres`, 20, 60);
-            doc.text(`N-P-K Values: ${soilData.nitrogen}-${soilData.phosphorus}-${soilData.potassium}`, 20, 70);
-            doc.text(`pH: ${soilData.ph}`, 20, 80);
+            doc.text(`Land Area: ${soilData.area || soilData.landArea || '1'} acres`, 20, 60);
+            doc.text(`N-P-K Values: ${soilData.N || 0}-${soilData.P || 0}-${soilData.K || 0}`, 20, 70);
+            doc.text(`pH: ${soilData.ph || 7.0}`, 20, 80);
             
             // Add recommended crop info
             doc.setFontSize(16);
