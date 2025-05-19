@@ -1,0 +1,93 @@
+Build a fully offline-capable web application for farmers and agricultural students that takes soil testing input and land area and suggests the best crops to grow, along with the full process from seed to harvest. The application should include a trained machine learning model for crop recommendation and a plant disease detection system using images (camera or upload). It must also provide a simple AI chatbot for answering queries about crop processes.
+
+💻 Detailed Requirements
+User Interface
+
+Simple and clean UI
+
+Signup and login page (multi-user support)
+
+Dashboard after login
+
+Inputs
+
+Soil test values (N, P, K, pH, EC, S, Cu, Fe, Mn, Zn, B)
+
+Land area
+
+Option to upload a soil test file (CSV or JSON)
+
+Output
+
+Crop suggestions using a trained ML model
+
+Full process for selected crop (from seed selection to fertilizers and harvesting)
+
+Downloadable PDF of the suggested crop process
+
+Disease Detection
+
+Use device camera or uploaded image
+
+Identify common crop diseases
+
+Suggest remedies or medicines
+
+AI Chatbot
+
+Offline chatbot to answer questions related to crop growing processes
+
+Use rule-based or keyword-matching techniques
+
+ML Model
+
+Train a simple machine learning model on mock or realistic soil data to predict suitable crops
+
+Use scikit-learn or similar
+
+Save as .pkl file for use in Flask backend
+
+Storage
+
+Use JSON files to store:
+
+Crop growing processes
+
+User data (optional)
+
+No need for internet or external DB
+
+Technology Stack
+
+Frontend: HTML, CSS, Bootstrap
+
+Backend: Flask (Python)
+
+ML: Scikit-learn (Crop prediction), TensorFlow/Keras or OpenCV (Disease detection)
+
+Chatbot: Simple rule-based or local LLM simulation
+
+PDF Generation: ReportLab or FPDF
+
+Offline Requirements
+
+Everything must work offline
+
+All models, data, and frontend should load without internet
+
+Camera and file access must be supported
+
+Deliverables
+
+Fully functional web app packaged as a ZIP file
+
+Includes all HTML, CSS, JS, Python, and model files
+
+A README.md file with setup instructions
+
+Sample soil test data and crop info in JSON
+
+.pkl trained ML model
+
+Final crop recommendation output as downloadable PDF
+
