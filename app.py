@@ -10,12 +10,18 @@ import uuid
 import io
 from models import User
 
+# Import the machine learning routes
+from routes.ml_routes import ml_routes
+
 # Configure logging
 logging.basicConfig(level=logging.DEBUG)
 
 # Initialize Flask app
 app = Flask(__name__)
 app.secret_key = os.environ.get("SESSION_SECRET", "dev_secret_key")
+
+# Register the machine learning routes
+app.register_blueprint(ml_routes)
 
 # Initialize Flask-Login
 login_manager = LoginManager()
