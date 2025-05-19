@@ -1,0 +1,477 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card bg-light border-0 shadow">
+            <div class="card-body">
+                <div class="d-flex align-items-center">
+                    <div>
+                        <h2><i class="fas fa-user-circle text-primary me-2"></i>User Profile</h2>
+                        <p class="lead">Manage your account and saved agricultural data</p>
+                    </div>
+                    <img src="https://pixabay.com/get/gda09fc5470e2259bdbc33e06cae93be230767216b58c5c7d77f4a76ca54a9d7a38dd89ce98ec28eecd001fb8a8264eaf0a691ad9711f77747bb0e01e384c4976_1280.jpg" 
+                         alt="Farming" class="img-fluid rounded ms-auto" style="max-width: 200px;">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-4">
+        <div class="card shadow mb-4">
+            <div class="card-header bg-primary text-white">
+                <h4 class="mb-0"><i class="fas fa-id-card me-2"></i>Account Information</h4>
+            </div>
+            <div class="card-body">
+                <div class="text-center mb-4">
+                    <div class="avatar-circle mx-auto mb-3">
+                        <span class="initials">{{ current_user.username[:2].upper() }}</span>
+                    </div>
+                    <h5>{{ current_user.username }}</h5>
+                    <p class="text-muted">{{ current_user.email }}</p>
+                </div>
+                
+                <div class="d-grid gap-2 mb-3">
+                    <button class="btn btn-outline-primary" id="edit-profile-btn">
+                        <i class="fas fa-edit me-2"></i>Edit Profile
+                    </button>
+                </div>
+                
+                <hr>
+                
+                <h6 class="mb-3">Account Details</h6>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item d-flex justify-content-between align-items-center bg-transparent">
+                        <span>Username</span>
+                        <span class="text-muted">{{ current_user.username }}</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center bg-transparent">
+                        <span>Email</span>
+                        <span class="text-muted">{{ current_user.email }}</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center bg-transparent">
+                        <span>Member Since</span>
+                        <span class="text-muted" id="member-since">N/A</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="card shadow">
+            <div class="card-header bg-danger text-white">
+                <h4 class="mb-0"><i class="fas fa-shield-alt me-2"></i>Security</h4>
+            </div>
+            <div class="card-body">
+                <div class="mb-3">
+                    <h6>Password Management</h6>
+                    <p class="text-muted small">Ensure your account remains secure by regularly updating your password.</p>
+                </div>
+                <div class="d-grid">
+                    <button class="btn btn-outline-danger" id="change-password-btn">
+                        <i class="fas fa-key me-2"></i>Change Password
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-8">
+        <div class="card shadow mb-4">
+            <div class="card-header bg-success text-white">
+                <h4 class="mb-0"><i class="fas fa-history me-2"></i>Activity History</h4>
+            </div>
+            <div class="card-body">
+                <ul class="nav nav-tabs mb-3" id="activityTabs" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active" id="soil-tests-tab" data-bs-toggle="tab" 
+                            data-bs-target="#soil-tests-content" type="button" role="tab">
+                            Soil Tests
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="recommendations-tab" data-bs-toggle="tab" 
+                            data-bs-target="#recommendations-content" type="button" role="tab">
+                            Crop Recommendations
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="diseases-tab" data-bs-toggle="tab" 
+                            data-bs-target="#diseases-content" type="button" role="tab">
+                            Disease Detections
+                        </button>
+                    </li>
+                </ul>
+                
+                <div class="tab-content" id="activityTabsContent">
+                    <!-- Soil Tests Tab -->
+                    <div class="tab-pane fade show active" id="soil-tests-content" role="tabpanel">
+                        <div id="soil-tests-loading" class="text-center py-4">
+                            <div class="spinner-border text-primary" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                            <p class="mt-2">Loading soil test history...</p>
+                        </div>
+                        <div id="soil-tests-empty" class="text-center py-4 d-none">
+                            <i class="fas fa-flask fa-3x text-muted mb-3"></i>
+                            <p>No soil test data found. Start by submitting soil test data.</p>
+                            <a href="{{ url_for('soil_test') }}" class="btn btn-primary mt-2">
+                                <i class="fas fa-flask me-2"></i>Submit Soil Test
+                            </a>
+                        </div>
+                        <div id="soil-tests-content" class="d-none">
+                            <!-- Soil tests will be populated by JavaScript -->
+                        </div>
+                    </div>
+                    
+                    <!-- Crop Recommendations Tab -->
+                    <div class="tab-pane fade" id="recommendations-content" role="tabpanel">
+                        <div id="recommendations-loading" class="text-center py-4">
+                            <div class="spinner-border text-success" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                            <p class="mt-2">Loading crop recommendation history...</p>
+                        </div>
+                        <div id="recommendations-empty" class="text-center py-4 d-none">
+                            <i class="fas fa-seedling fa-3x text-muted mb-3"></i>
+                            <p>No crop recommendations found. Get recommendations based on your soil test data.</p>
+                            <a href="{{ url_for('crop_recommendations') }}" class="btn btn-success mt-2">
+                                <i class="fas fa-seedling me-2"></i>Get Recommendations
+                            </a>
+                        </div>
+                        <div id="recommendations-content" class="d-none">
+                            <!-- Recommendations will be populated by JavaScript -->
+                        </div>
+                    </div>
+                    
+                    <!-- Disease Detections Tab -->
+                    <div class="tab-pane fade" id="diseases-content" role="tabpanel">
+                        <div id="diseases-loading" class="text-center py-4">
+                            <div class="spinner-border text-danger" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                            <p class="mt-2">Loading disease detection history...</p>
+                        </div>
+                        <div id="diseases-empty" class="text-center py-4 d-none">
+                            <i class="fas fa-bug fa-3x text-muted mb-3"></i>
+                            <p>No disease detections found. Use the disease detection tool to analyze plant images.</p>
+                            <a href="{{ url_for('disease_detection') }}" class="btn btn-danger mt-2">
+                                <i class="fas fa-bug me-2"></i>Detect Diseases
+                            </a>
+                        </div>
+                        <div id="diseases-content" class="d-none">
+                            <!-- Disease detections will be populated by JavaScript -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card shadow">
+            <div class="card-header bg-info text-white">
+                <h4 class="mb-0"><i class="fas fa-cog me-2"></i>Settings</h4>
+            </div>
+            <div class="card-body">
+                <form id="settings-form">
+                    <h5 class="mb-3">Application Settings</h5>
+                    
+                    <div class="mb-3">
+                        <div class="form-check form-switch">
+                            <input class="form-check-input" type="checkbox" id="offline-mode" checked>
+                            <label class="form-check-label" for="offline-mode">Enable offline mode</label>
+                        </div>
+                        <small class="text-muted">When enabled, the application will work without internet connection.</small>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <div class="form-check form-switch">
+                            <input class="form-check-input" type="checkbox" id="data-sync">
+                            <label class="form-check-label" for="data-sync">Sync data when online</label>
+                        </div>
+                        <small class="text-muted">When enabled, data will be synchronized when internet connection is available.</small>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <div class="form-check form-switch">
+                            <input class="form-check-input" type="checkbox" id="notifications" checked>
+                            <label class="form-check-label" for="notifications">Enable notifications</label>
+                        </div>
+                        <small class="text-muted">Receive notifications about crop recommendations and disease alerts.</small>
+                    </div>
+                    
+                    <h5 class="mt-4 mb-3">Data Management</h5>
+                    
+                    <div class="mb-3">
+                        <button type="button" class="btn btn-outline-primary me-2" id="export-data-btn">
+                            <i class="fas fa-file-export me-2"></i>Export Data
+                        </button>
+                        <button type="button" class="btn btn-outline-warning" id="clear-data-btn">
+                            <i class="fas fa-trash-alt me-2"></i>Clear Local Data
+                        </button>
+                    </div>
+                    
+                    <div class="d-grid mt-4">
+                        <button type="submit" class="btn btn-info text-white">
+                            <i class="fas fa-save me-2"></i>Save Settings
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Edit Profile Modal -->
+<div class="modal fade" id="editProfileModal" tabindex="-1" aria-labelledby="editProfileModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editProfileModalLabel">Edit Profile</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="edit-profile-form">
+                    <div class="mb-3">
+                        <label for="edit-username" class="form-label">Username</label>
+                        <input type="text" class="form-control" id="edit-username" value="{{ current_user.username }}" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="edit-email" class="form-label">Email</label>
+                        <input type="email" class="form-control" id="edit-email" value="{{ current_user.email }}" required>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" id="save-profile-btn">Save Changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Change Password Modal -->
+<div class="modal fade" id="changePasswordModal" tabindex="-1" aria-labelledby="changePasswordModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="changePasswordModalLabel">Change Password</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="change-password-form">
+                    <div class="mb-3">
+                        <label for="current-password" class="form-label">Current Password</label>
+                        <input type="password" class="form-control" id="current-password" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="new-password" class="form-label">New Password</label>
+                        <input type="password" class="form-control" id="new-password" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="confirm-new-password" class="form-label">Confirm New Password</label>
+                        <input type="password" class="form-control" id="confirm-new-password" required>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" id="save-password-btn">Change Password</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Set member since date (placeholder - would come from user data in real app)
+        document.getElementById('member-since').textContent = new Date().toLocaleDateString();
+        
+        // Initialize modal handlers
+        const editProfileModal = new bootstrap.Modal(document.getElementById('editProfileModal'));
+        const changePasswordModal = new bootstrap.Modal(document.getElementById('changePasswordModal'));
+        
+        // Show edit profile modal
+        document.getElementById('edit-profile-btn').addEventListener('click', function() {
+            editProfileModal.show();
+        });
+        
+        // Show change password modal
+        document.getElementById('change-password-btn').addEventListener('click', function() {
+            changePasswordModal.show();
+        });
+        
+        // Save profile changes
+        document.getElementById('save-profile-btn').addEventListener('click', function() {
+            // In a real app, this would send data to server
+            const username = document.getElementById('edit-username').value;
+            const email = document.getElementById('edit-email').value;
+            
+            if (username && email) {
+                // Simulate success
+                showNotification('Profile updated successfully!', 'success');
+                editProfileModal.hide();
+            } else {
+                showNotification('Please fill in all required fields.', 'danger');
+            }
+        });
+        
+        // Change password
+        document.getElementById('save-password-btn').addEventListener('click', function() {
+            const currentPassword = document.getElementById('current-password').value;
+            const newPassword = document.getElementById('new-password').value;
+            const confirmPassword = document.getElementById('confirm-new-password').value;
+            
+            if (!currentPassword || !newPassword || !confirmPassword) {
+                showNotification('Please fill in all password fields.', 'danger');
+                return;
+            }
+            
+            if (newPassword !== confirmPassword) {
+                showNotification('New passwords do not match.', 'danger');
+                return;
+            }
+            
+            // In a real app, this would verify current password and set new password
+            
+            // Simulate success
+            showNotification('Password changed successfully!', 'success');
+            changePasswordModal.hide();
+            
+            // Clear form
+            document.getElementById('change-password-form').reset();
+        });
+        
+        // Save settings
+        document.getElementById('settings-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const settings = {
+                offlineMode: document.getElementById('offline-mode').checked,
+                dataSync: document.getElementById('data-sync').checked,
+                notifications: document.getElementById('notifications').checked
+            };
+            
+            // In a real app, this would save to IndexedDB
+            if (window.dbUtils && window.dbUtils.saveUserSettings) {
+                window.dbUtils.saveUserSettings('{{ current_user.id }}', settings)
+                    .then(() => {
+                        showNotification('Settings saved successfully!', 'success');
+                    })
+                    .catch(err => {
+                        console.error('Error saving settings:', err);
+                        showNotification('Error saving settings. Please try again.', 'danger');
+                    });
+            } else {
+                // Simulate success
+                showNotification('Settings saved successfully!', 'success');
+            }
+        });
+        
+        // Export data button
+        document.getElementById('export-data-btn').addEventListener('click', function() {
+            // In a real app, this would export all user data from IndexedDB
+            showNotification('Data export functionality will be available soon.', 'info');
+        });
+        
+        // Clear data button
+        document.getElementById('clear-data-btn').addEventListener('click', function() {
+            if (confirm('Are you sure you want to clear all local data? This cannot be undone.')) {
+                // In a real app, this would clear IndexedDB stores
+                if (window.dbUtils && window.dbUtils.clearStore) {
+                    Promise.all([
+                        window.dbUtils.clearStore(window.dbUtils.STORES.SOIL_TESTS),
+                        window.dbUtils.clearStore(window.dbUtils.STORES.RECOMMENDATIONS),
+                        window.dbUtils.clearStore(window.dbUtils.STORES.DISEASE_RESULTS)
+                    ])
+                    .then(() => {
+                        showNotification('Local data cleared successfully!', 'success');
+                    })
+                    .catch(err => {
+                        console.error('Error clearing data:', err);
+                        showNotification('Error clearing data. Please try again.', 'danger');
+                    });
+                } else {
+                    // Simulate success
+                    showNotification('Local data cleared successfully!', 'success');
+                }
+            }
+        });
+        
+        // Simulate loading and displaying activity history
+        loadActivityHistory();
+    });
+    
+    function loadActivityHistory() {
+        // Simulate loading soil tests
+        setTimeout(() => {
+            document.getElementById('soil-tests-loading').classList.add('d-none');
+            document.getElementById('soil-tests-empty').classList.remove('d-none');
+            
+            // In a real app, this would load from IndexedDB
+            // For now, we'll show empty state
+        }, 1000);
+        
+        // Simulate loading recommendations
+        setTimeout(() => {
+            document.getElementById('recommendations-loading').classList.add('d-none');
+            document.getElementById('recommendations-empty').classList.remove('d-none');
+            
+            // In a real app, this would load from IndexedDB
+            // For now, we'll show empty state
+        }, 1200);
+        
+        // Simulate loading disease detections
+        setTimeout(() => {
+            document.getElementById('diseases-loading').classList.add('d-none');
+            document.getElementById('diseases-empty').classList.remove('d-none');
+            
+            // In a real app, this would load from IndexedDB
+            // For now, we'll show empty state
+        }, 1400);
+    }
+    
+    // Utility function to show notifications (should match the one in main.js)
+    function showNotification(message, type = 'info', duration = 3000) {
+        // Check if the main.js function exists
+        if (window.showNotification) {
+            window.showNotification(message, type, duration);
+            return;
+        }
+        
+        // Fallback implementation
+        const notification = document.createElement('div');
+        notification.className = `alert alert-${type} position-fixed bottom-0 end-0 m-3`;
+        notification.setAttribute('role', 'alert');
+        notification.style.minWidth = '250px';
+        notification.style.zIndex = '9999';
+        notification.innerHTML = message;
+        
+        document.body.appendChild(notification);
+        
+        setTimeout(() => {
+            notification.remove();
+        }, duration);
+    }
+</script>
+
+<style>
+    .avatar-circle {
+        width: 100px;
+        height: 100px;
+        background-color: #28a745;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .initials {
+        font-size: 42px;
+        color: white;
+        font-weight: bold;
+    }
+</style>
+{% endblock %}

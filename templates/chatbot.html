@@ -1,0 +1,333 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card bg-light border-0 shadow">
+            <div class="card-body">
+                <div class="d-flex align-items-center">
+                    <div>
+                        <h2><i class="fas fa-robot text-info me-2"></i>Farming Assistant Chatbot</h2>
+                        <p class="lead">Ask questions about crop growing, farming practices, and agriculture</p>
+                    </div>
+                    <img src="https://pixabay.com/get/g15376b072d7e6c8bda571d3ac2a2ee248a05dc2daa38e987bd2473d7fb0fcf6982f5d634c4eefb6377f07e4bab8aa9b6ba611b5e3afbc10db7c0b1b51f35ac03_1280.jpg" 
+                         alt="Farming" class="img-fluid rounded ms-auto" style="max-width: 200px;">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-8">
+        <div class="card shadow" style="height: 550px;">
+            <div class="card-header bg-info text-white">
+                <h4 class="mb-0"><i class="fas fa-comments me-2"></i>Chat</h4>
+            </div>
+            <div class="card-body d-flex flex-column" style="overflow: hidden;">
+                <div id="chat-messages" class="flex-grow-1 overflow-auto mb-3" style="height: 400px;">
+                    <div class="d-flex mb-3">
+                        <div class="flex-shrink-0">
+                            <div class="avatar avatar-bot">
+                                <i class="fas fa-robot"></i>
+                            </div>
+                        </div>
+                        <div class="flex-grow-1 ms-3">
+                            <div class="message message-bot">
+                                <p>Hello! I'm your farming assistant. I can help answer questions about crop growing, farming practices, and agricultural techniques. What would you like to know?</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="chat-input">
+                    <form id="chat-form" class="d-flex">
+                        <input type="text" id="user-message" class="form-control" placeholder="Type your question here..." required>
+                        <button type="submit" class="btn btn-info text-white ms-2">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4">
+        <div class="card shadow mb-4">
+            <div class="card-header bg-success text-white">
+                <h4 class="mb-0"><i class="fas fa-lightbulb me-2"></i>Suggested Topics</h4>
+            </div>
+            <div class="card-body">
+                <div class="list-group">
+                    <button class="list-group-item list-group-item-action suggested-question">
+                        How do I improve soil fertility naturally?
+                    </button>
+                    <button class="list-group-item list-group-item-action suggested-question">
+                        What are the best practices for crop rotation?
+                    </button>
+                    <button class="list-group-item list-group-item-action suggested-question">
+                        How to manage weeds without herbicides?
+                    </button>
+                    <button class="list-group-item list-group-item-action suggested-question">
+                        What's the best time to plant wheat?
+                    </button>
+                    <button class="list-group-item list-group-item-action suggested-question">
+                        How to identify nutrient deficiencies in plants?
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card shadow">
+            <div class="card-header bg-primary text-white">
+                <h4 class="mb-0"><i class="fas fa-info-circle me-2"></i>About</h4>
+            </div>
+            <div class="card-body">
+                <p>This chatbot works completely offline and uses a rule-based system to answer your farming questions.</p>
+                <p>It has knowledge about:</p>
+                <ul>
+                    <li>Crop growing processes</li>
+                    <li>Soil management</li>
+                    <li>Pest and disease control</li>
+                    <li>Sustainable farming practices</li>
+                    <li>Basic agricultural techniques</li>
+                </ul>
+                <p class="mb-0"><small class="text-muted">The assistant works best with clear, specific questions about farming topics.</small></p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/chatbot.js') }}"></script>
+<script src="{{ url_for('static', filename='data/chatbot_data.js') }}"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const chatMessages = document.getElementById('chat-messages');
+        const chatForm = document.getElementById('chat-form');
+        const userMessageInput = document.getElementById('user-message');
+        const suggestedQuestions = document.querySelectorAll('.suggested-question');
+        
+        // Sample knowledge base for the chatbot
+        const knowledgeBase = {
+            "soil fertility": [
+                "To improve soil fertility naturally, you can:",
+                "1. Add compost or well-rotted manure",
+                "2. Plant cover crops like clover or vetch",
+                "3. Use crop rotation with legumes",
+                "4. Apply natural minerals like rock phosphate",
+                "5. Mulch with organic materials",
+                "6. Minimize soil disturbance to protect soil biology"
+            ],
+            "crop rotation": [
+                "Best practices for crop rotation include:",
+                "1. Rotate between plant families, not just different crops",
+                "2. Include legumes in your rotation to fix nitrogen",
+                "3. Alternate between deep and shallow-rooted crops",
+                "4. Plan 3-4 year rotations for best pest/disease management",
+                "5. Consider nutrient needs in your rotation sequence",
+                "6. Include cover crops between main crops when possible"
+            ],
+            "weed management": [
+                "To manage weeds without herbicides:",
+                "1. Use mulch to suppress weed growth",
+                "2. Implement timely cultivation and hand weeding",
+                "3. Plant cover crops to compete with weeds",
+                "4. Use stale seedbed technique",
+                "5. Maintain proper crop spacing to shade out weeds",
+                "6. Consider flame weeding for row crops"
+            ],
+            "planting time": [
+                "Planting times vary by crop and region, but general guidelines for common crops:",
+                "- Wheat: Fall planting for winter wheat, early spring for spring wheat",
+                "- Corn: When soil temperatures reach 50-55°F (10-13°C)",
+                "- Soybeans: When soil temperatures reach 60°F (15.5°C)",
+                "- Potatoes: 2-3 weeks before last frost date",
+                "- Rice: Spring when temperatures are consistently above 65°F (18°C)"
+            ],
+            "nutrient deficiencies": [
+                "Common plant nutrient deficiency symptoms:",
+                "- Nitrogen: Yellowing of older leaves, stunted growth",
+                "- Phosphorus: Purple discoloration, stunted roots",
+                "- Potassium: Brown leaf edges, weak stems",
+                "- Calcium: Distorted new growth, blossom end rot",
+                "- Magnesium: Yellowing between leaf veins",
+                "- Iron: Yellowing of young leaves with green veins"
+            ],
+            "irrigation": [
+                "Effective irrigation practices include:",
+                "1. Water deeply and less frequently to encourage deep root growth",
+                "2. Irrigate early in the morning to reduce evaporation",
+                "3. Use drip irrigation when possible to conserve water",
+                "4. Monitor soil moisture with sensors or manual methods",
+                "5. Adjust watering based on crop growth stage",
+                "6. Consider rainfall in your irrigation schedule"
+            ],
+            "composting": [
+                "For successful composting:",
+                "1. Balance 'browns' (carbon) and 'greens' (nitrogen) in a ratio of about 3:1",
+                "2. Keep compost pile moist but not soggy",
+                "3. Turn regularly to provide oxygen",
+                "4. Ensure proper particle size for faster decomposition",
+                "5. Keep pile size between 3x3x3 feet to 5x5x5 feet",
+                "6. Avoid meat, dairy, and oily foods in compost"
+            ],
+            "default": [
+                "I don't have specific information about that topic. Here are some general farming best practices:",
+                "1. Test your soil regularly to understand its needs",
+                "2. Practice crop rotation to break pest cycles",
+                "3. Incorporate organic matter to improve soil health",
+                "4. Use integrated pest management (IPM) principles",
+                "5. Conserve water through efficient irrigation",
+                "6. Keep detailed records of your farming practices"
+            ]
+        };
+        
+        // Function to find the best match in the knowledge base
+        function findBestMatch(query) {
+            query = query.toLowerCase();
+            
+            // Check for direct keywords
+            for (const [keyword, response] of Object.entries(knowledgeBase)) {
+                if (query.includes(keyword)) {
+                    return response;
+                }
+            }
+            
+            // Check for related terms
+            if (query.includes("fertilizer") || query.includes("compost")) {
+                return knowledgeBase["soil fertility"];
+            } else if (query.includes("rotation") || query.includes("sequence")) {
+                return knowledgeBase["crop rotation"];
+            } else if (query.includes("weed") || query.includes("herbicide")) {
+                return knowledgeBase["weed management"];
+            } else if (query.includes("when to plant") || query.includes("sowing")) {
+                return knowledgeBase["planting time"];
+            } else if (query.includes("deficiency") || query.includes("nutrient") || query.includes("fertilize")) {
+                return knowledgeBase["nutrient deficiencies"];
+            } else if (query.includes("water") || query.includes("irrigate")) {
+                return knowledgeBase["irrigation"];
+            } else if (query.includes("compost") || query.includes("organic matter")) {
+                return knowledgeBase["composting"];
+            }
+            
+            // Default response
+            return knowledgeBase["default"];
+        }
+        
+        // Function to add a message to the chat
+        function addMessage(sender, message) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'd-flex mb-3';
+            
+            if (sender === 'user') {
+                messageDiv.innerHTML = `
+                    <div class="flex-grow-1 me-3">
+                        <div class="message message-user">
+                            <p>${message}</p>
+                        </div>
+                    </div>
+                    <div class="flex-shrink-0">
+                        <div class="avatar avatar-user">
+                            <i class="fas fa-user"></i>
+                        </div>
+                    </div>
+                `;
+            } else {
+                messageDiv.innerHTML = `
+                    <div class="flex-shrink-0">
+                        <div class="avatar avatar-bot">
+                            <i class="fas fa-robot"></i>
+                        </div>
+                    </div>
+                    <div class="flex-grow-1 ms-3">
+                        <div class="message message-bot">
+                            ${Array.isArray(message) ? message.map(line => `<p>${line}</p>`).join('') : `<p>${message}</p>`}
+                        </div>
+                    </div>
+                `;
+            }
+            
+            chatMessages.appendChild(messageDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+        
+        // Handle form submission
+        chatForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const userMessage = userMessageInput.value.trim();
+            if (!userMessage) return;
+            
+            // Add user message to chat
+            addMessage('user', userMessage);
+            
+            // Clear input
+            userMessageInput.value = '';
+            
+            // Process query and get response
+            setTimeout(() => {
+                const response = findBestMatch(userMessage);
+                addMessage('bot', response);
+            }, 500);
+        });
+        
+        // Handle suggested questions
+        suggestedQuestions.forEach(button => {
+            button.addEventListener('click', function() {
+                const question = this.textContent.trim();
+                
+                // Set input value
+                userMessageInput.value = question;
+                
+                // Submit the form
+                chatForm.dispatchEvent(new Event('submit'));
+            });
+        });
+    });
+</script>
+
+<style>
+    .avatar {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+    }
+    
+    .avatar-bot {
+        background-color: #0dcaf0;
+    }
+    
+    .avatar-user {
+        background-color: #6c757d;
+    }
+    
+    .message {
+        padding: 10px 15px;
+        border-radius: 10px;
+        max-width: 80%;
+    }
+    
+    .message p {
+        margin-bottom: 0.5rem;
+    }
+    
+    .message p:last-child {
+        margin-bottom: 0;
+    }
+    
+    .message-bot {
+        background-color: #f8f9fa;
+    }
+    
+    .message-user {
+        background-color: #e9ecef;
+        margin-left: auto;
+    }
+</style>
+{% endblock %}

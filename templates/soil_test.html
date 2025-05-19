@@ -1,0 +1,385 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card bg-light border-0 shadow">
+            <div class="card-body">
+                <div class="d-flex align-items-center">
+                    <div>
+                        <h2><i class="fas fa-flask text-primary me-2"></i>Soil Test</h2>
+                        <p class="lead">Enter your soil test results to get personalized crop recommendations</p>
+                    </div>
+                    <img src="https://pixabay.com/get/g964f3723e6562d498e70307c99bb6e620d86cbe4024ccb74b95c5d397239af3845a05298b7bfc50495ddf2f1d0b6d860a4a5aac30262eabe66a8f69b204c22d1_1280.jpg" 
+                         alt="Soil Testing" class="img-fluid rounded ms-auto" style="max-width: 200px;">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-8">
+        <div class="card shadow">
+            <div class="card-header bg-primary text-white">
+                <h4 class="mb-0"><i class="fas fa-edit me-2"></i>Enter Soil Test Data</h4>
+            </div>
+            <div class="card-body">
+                <form id="soil-test-form">
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label for="location" class="form-label">Location Name</label>
+                            <input type="text" class="form-control" id="location" placeholder="e.g., North Field">
+                        </div>
+                        <div class="col-md-6">
+                            <label for="land-area" class="form-label">Land Area (in acres)</label>
+                            <input type="number" step="0.01" min="0.01" class="form-control" id="land-area" placeholder="e.g., 5.5" required>
+                        </div>
+                    </div>
+                    
+                    <h5 class="mt-4 mb-3">Macronutrients</h5>
+                    <div class="row g-3">
+                        <div class="col-md-4">
+                            <label for="nitrogen" class="form-label">Nitrogen (N) - kg/ha</label>
+                            <input type="number" step="0.01" min="0" class="form-control" id="nitrogen" placeholder="e.g., 80" required>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="phosphorus" class="form-label">Phosphorus (P) - kg/ha</label>
+                            <input type="number" step="0.01" min="0" class="form-control" id="phosphorus" placeholder="e.g., 45" required>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="potassium" class="form-label">Potassium (K) - kg/ha</label>
+                            <input type="number" step="0.01" min="0" class="form-control" id="potassium" placeholder="e.g., 60" required>
+                        </div>
+                    </div>
+                    
+                    <h5 class="mt-4 mb-3">Soil Properties</h5>
+                    <div class="row g-3">
+                        <div class="col-md-4">
+                            <label for="ph" class="form-label">pH Value</label>
+                            <input type="number" step="0.01" min="0" max="14" class="form-control" id="ph" placeholder="e.g., 6.5" required>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="ec" class="form-label">EC (mmhos/cm)</label>
+                            <input type="number" step="0.01" min="0" class="form-control" id="ec" placeholder="e.g., 0.5">
+                        </div>
+                        <div class="col-md-4">
+                            <label for="sulfur" class="form-label">Sulfur (S) - ppm</label>
+                            <input type="number" step="0.01" min="0" class="form-control" id="sulfur" placeholder="e.g., 12">
+                        </div>
+                    </div>
+                    
+                    <h5 class="mt-4 mb-3">Micronutrients</h5>
+                    <div class="row g-3">
+                        <div class="col-md-3">
+                            <label for="copper" class="form-label">Copper (Cu) - ppm</label>
+                            <input type="number" step="0.01" min="0" class="form-control" id="copper" placeholder="e.g., 0.5">
+                        </div>
+                        <div class="col-md-3">
+                            <label for="iron" class="form-label">Iron (Fe) - ppm</label>
+                            <input type="number" step="0.01" min="0" class="form-control" id="iron" placeholder="e.g., 20">
+                        </div>
+                        <div class="col-md-3">
+                            <label for="manganese" class="form-label">Manganese (Mn) - ppm</label>
+                            <input type="number" step="0.01" min="0" class="form-control" id="manganese" placeholder="e.g., 2">
+                        </div>
+                        <div class="col-md-3">
+                            <label for="zinc" class="form-label">Zinc (Zn) - ppm</label>
+                            <input type="number" step="0.01" min="0" class="form-control" id="zinc" placeholder="e.g., 0.8">
+                        </div>
+                    </div>
+                    
+                    <div class="row g-3 mt-2">
+                        <div class="col-md-4">
+                            <label for="boron" class="form-label">Boron (B) - ppm</label>
+                            <input type="number" step="0.01" min="0" class="form-control" id="boron" placeholder="e.g., 0.5">
+                        </div>
+                        <div class="col-md-4">
+                            <label for="organic-matter" class="form-label">Organic Matter (%)</label>
+                            <input type="number" step="0.01" min="0" max="100" class="form-control" id="organic-matter" placeholder="e.g., 2.5">
+                        </div>
+                        <div class="col-md-4">
+                            <label for="soil-texture" class="form-label">Soil Texture</label>
+                            <select class="form-select" id="soil-texture">
+                                <option value="" selected disabled>Select texture</option>
+                                <option value="sandy">Sandy</option>
+                                <option value="loamy">Loamy</option>
+                                <option value="clayey">Clayey</option>
+                                <option value="silty">Silty</option>
+                                <option value="peaty">Peaty</option>
+                                <option value="chalky">Chalky</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="d-grid gap-2 mt-4">
+                        <button type="submit" class="btn btn-primary btn-lg">
+                            <i class="fas fa-check-circle me-2"></i>Get Crop Recommendations
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4">
+        <div class="card shadow mb-4">
+            <div class="card-header bg-success text-white">
+                <h4 class="mb-0"><i class="fas fa-upload me-2"></i>Upload Test Results</h4>
+            </div>
+            <div class="card-body">
+                <form id="upload-form">
+                    <div class="mb-3">
+                        <label for="file-upload" class="form-label">Upload Soil Test CSV or JSON</label>
+                        <input class="form-control" type="file" id="file-upload" accept=".csv, .json">
+                    </div>
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-success">
+                            <i class="fas fa-file-import me-2"></i>Import Data
+                        </button>
+                    </div>
+                </form>
+                
+                <div class="alert alert-info mt-3">
+                    <small>
+                        <i class="fas fa-info-circle me-2"></i>Upload a CSV or JSON file with your soil test results to auto-fill the form.
+                    </small>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card shadow">
+            <div class="card-header bg-info text-white">
+                <h4 class="mb-0"><i class="fas fa-history me-2"></i>Previous Tests</h4>
+            </div>
+            <div class="card-body">
+                <div id="previous-tests-loading" class="text-center py-2">
+                    <div class="spinner-border spinner-border-sm text-secondary" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                    <span class="ms-2">Loading saved tests...</span>
+                </div>
+                <div id="previous-tests-empty" class="text-center py-2 d-none">
+                    <p class="text-muted">No saved soil tests found.</p>
+                </div>
+                <div id="previous-tests-list" class="d-none">
+                    <!-- Previous tests will be populated by JavaScript -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Handle soil test form submission
+        document.getElementById('soil-test-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Get form values
+            const soilData = {
+                location: document.getElementById('location').value,
+                landArea: document.getElementById('land-area').value,
+                nitrogen: document.getElementById('nitrogen').value,
+                phosphorus: document.getElementById('phosphorus').value,
+                potassium: document.getElementById('potassium').value,
+                ph: document.getElementById('ph').value,
+                ec: document.getElementById('ec').value,
+                sulfur: document.getElementById('sulfur').value,
+                copper: document.getElementById('copper').value,
+                iron: document.getElementById('iron').value,
+                manganese: document.getElementById('manganese').value,
+                zinc: document.getElementById('zinc').value,
+                boron: document.getElementById('boron').value,
+                organicMatter: document.getElementById('organic-matter').value,
+                soilTexture: document.getElementById('soil-texture').value,
+                timestamp: new Date().toISOString()
+            };
+            
+            // Save to IndexedDB
+            saveSoilTestData(soilData)
+                .then(() => {
+                    // Redirect to recommendations page
+                    window.location.href = "{{ url_for('crop_recommendations') }}";
+                })
+                .catch(err => {
+                    console.error('Error saving soil test data:', err);
+                    alert('Error saving soil test data. Please try again.');
+                });
+        });
+        
+        // Handle file upload
+        document.getElementById('upload-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const fileInput = document.getElementById('file-upload');
+            const file = fileInput.files[0];
+            
+            if (!file) {
+                alert('Please select a file to upload.');
+                return;
+            }
+            
+            const reader = new FileReader();
+            
+            reader.onload = function(event) {
+                try {
+                    let data;
+                    
+                    if (file.name.endsWith('.json')) {
+                        data = JSON.parse(event.target.result);
+                    } else if (file.name.endsWith('.csv')) {
+                        // Simple CSV parsing
+                        const lines = event.target.result.split('\n');
+                        const headers = lines[0].split(',');
+                        const values = lines[1].split(',');
+                        
+                        data = {};
+                        headers.forEach((header, index) => {
+                            data[header.trim()] = values[index]?.trim();
+                        });
+                    } else {
+                        throw new Error('Unsupported file format');
+                    }
+                    
+                    // Fill the form with the loaded data
+                    if (data.location) document.getElementById('location').value = data.location;
+                    if (data.landArea) document.getElementById('land-area').value = data.landArea;
+                    if (data.nitrogen) document.getElementById('nitrogen').value = data.nitrogen;
+                    if (data.phosphorus) document.getElementById('phosphorus').value = data.phosphorus;
+                    if (data.potassium) document.getElementById('potassium').value = data.potassium;
+                    if (data.ph) document.getElementById('ph').value = data.ph;
+                    if (data.ec) document.getElementById('ec').value = data.ec;
+                    if (data.sulfur) document.getElementById('sulfur').value = data.sulfur;
+                    if (data.copper) document.getElementById('copper').value = data.copper;
+                    if (data.iron) document.getElementById('iron').value = data.iron;
+                    if (data.manganese) document.getElementById('manganese').value = data.manganese;
+                    if (data.zinc) document.getElementById('zinc').value = data.zinc;
+                    if (data.boron) document.getElementById('boron').value = data.boron;
+                    if (data.organicMatter) document.getElementById('organic-matter').value = data.organicMatter;
+                    if (data.soilTexture) document.getElementById('soil-texture').value = data.soilTexture;
+                    
+                    alert('Data imported successfully!');
+                } catch (err) {
+                    console.error('Error parsing file:', err);
+                    alert('Error parsing file. Please ensure the file format is correct.');
+                }
+            };
+            
+            if (file.name.endsWith('.json')) {
+                reader.readAsText(file);
+            } else if (file.name.endsWith('.csv')) {
+                reader.readAsText(file);
+            } else {
+                alert('Please upload a CSV or JSON file.');
+            }
+        });
+        
+        // Load previous tests
+        setTimeout(() => {
+            document.getElementById('previous-tests-loading').classList.add('d-none');
+            document.getElementById('previous-tests-empty').classList.remove('d-none');
+            
+            // In a real implementation, we would load from IndexedDB here
+            loadPreviousSoilTests()
+                .then(tests => {
+                    if (tests && tests.length > 0) {
+                        displayPreviousTests(tests);
+                    }
+                })
+                .catch(err => {
+                    console.error('Error loading previous tests:', err);
+                });
+        }, 1000);
+        
+        function displayPreviousTests(tests) {
+            if (!tests || tests.length === 0) return;
+            
+            const list = document.getElementById('previous-tests-list');
+            list.innerHTML = '';
+            
+            tests.forEach(test => {
+                const item = document.createElement('div');
+                item.className = 'card mb-2';
+                
+                const date = new Date(test.timestamp).toLocaleDateString();
+                const location = test.location || 'Unnamed Location';
+                
+                item.innerHTML = `
+                    <div class="card-body py-2">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <h6 class="mb-0">${location}</h6>
+                                <small class="text-muted">${date}</small>
+                            </div>
+                            <button class="btn btn-sm btn-outline-primary load-test" data-id="${test.id}">
+                                <i class="fas fa-sync-alt"></i> Load
+                            </button>
+                        </div>
+                    </div>
+                `;
+                
+                list.appendChild(item);
+            });
+            
+            document.getElementById('previous-tests-empty').classList.add('d-none');
+            document.getElementById('previous-tests-list').classList.remove('d-none');
+            
+            // Add event listeners for load buttons
+            document.querySelectorAll('.load-test').forEach(button => {
+                button.addEventListener('click', function() {
+                    const testId = this.getAttribute('data-id');
+                    loadSoilTest(testId)
+                        .then(test => {
+                            // Fill the form with the loaded data
+                            if (test.location) document.getElementById('location').value = test.location;
+                            if (test.landArea) document.getElementById('land-area').value = test.landArea;
+                            if (test.nitrogen) document.getElementById('nitrogen').value = test.nitrogen;
+                            if (test.phosphorus) document.getElementById('phosphorus').value = test.phosphorus;
+                            if (test.potassium) document.getElementById('potassium').value = test.potassium;
+                            if (test.ph) document.getElementById('ph').value = test.ph;
+                            if (test.ec) document.getElementById('ec').value = test.ec;
+                            if (test.sulfur) document.getElementById('sulfur').value = test.sulfur;
+                            if (test.copper) document.getElementById('copper').value = test.copper;
+                            if (test.iron) document.getElementById('iron').value = test.iron;
+                            if (test.manganese) document.getElementById('manganese').value = test.manganese;
+                            if (test.zinc) document.getElementById('zinc').value = test.zinc;
+                            if (test.boron) document.getElementById('boron').value = test.boron;
+                            if (test.organicMatter) document.getElementById('organic-matter').value = test.organicMatter;
+                            if (test.soilTexture) document.getElementById('soil-texture').value = test.soilTexture;
+                        })
+                        .catch(err => {
+                            console.error('Error loading soil test:', err);
+                            alert('Error loading soil test. Please try again.');
+                        });
+                });
+            });
+        }
+        
+        // Mock functions for IndexedDB operations
+        function saveSoilTestData(data) {
+            return new Promise((resolve, reject) => {
+                // In a real implementation, we would save to IndexedDB here
+                localStorage.setItem('currentSoilTest', JSON.stringify(data));
+                resolve();
+            });
+        }
+        
+        function loadPreviousSoilTests() {
+            return new Promise((resolve) => {
+                // In a real implementation, we would load from IndexedDB here
+                resolve([]);
+            });
+        }
+        
+        function loadSoilTest(id) {
+            return new Promise((resolve, reject) => {
+                // In a real implementation, we would load from IndexedDB here
+                reject(new Error('Not implemented'));
+            });
+        }
+    });
+</script>
+{% endblock %}

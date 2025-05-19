@@ -1,0 +1,363 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card bg-light border-0 shadow">
+            <div class="card-body">
+                <div class="d-flex align-items-center">
+                    <div>
+                        <h2><i class="fas fa-bug text-danger me-2"></i>Plant Disease Detection</h2>
+                        <p class="lead">Identify plant diseases and get treatment recommendations</p>
+                    </div>
+                    <img src="https://pixabay.com/get/g61f96e7953b24650d23b462ade92c393178dcf3bba1d077a5707cec343309e10a341ffd7720b60a3f56df5c26e324ef96257809770056fa7f659758a780d9771_1280.jpg" 
+                         alt="Plant Disease" class="img-fluid rounded ms-auto" style="max-width: 200px;">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-7">
+        <div class="card shadow mb-4">
+            <div class="card-header bg-danger text-white">
+                <h4 class="mb-0"><i class="fas fa-camera me-2"></i>Capture or Upload Plant Image</h4>
+            </div>
+            <div class="card-body">
+                <ul class="nav nav-tabs mb-3" id="imageTabs" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active" id="camera-tab" data-bs-toggle="tab" data-bs-target="#camera-tab-pane" type="button" role="tab">
+                            <i class="fas fa-camera me-2"></i>Use Camera
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="upload-tab" data-bs-toggle="tab" data-bs-target="#upload-tab-pane" type="button" role="tab">
+                            <i class="fas fa-upload me-2"></i>Upload Image
+                        </button>
+                    </li>
+                </ul>
+                
+                <div class="tab-content" id="imageTabsContent">
+                    <!-- Camera Tab -->
+                    <div class="tab-pane fade show active" id="camera-tab-pane" role="tabpanel" tabindex="0">
+                        <div class="text-center">
+                            <div id="camera-container" class="mb-3">
+                                <video id="camera-preview" class="img-fluid rounded border" style="max-height: 350px; width: 100%;" autoplay playsinline></video>
+                                <canvas id="camera-canvas" class="d-none"></canvas>
+                            </div>
+                            <div id="camera-controls">
+                                <button id="start-camera" class="btn btn-primary">
+                                    <i class="fas fa-video me-2"></i>Start Camera
+                                </button>
+                                <button id="capture-image" class="btn btn-success d-none">
+                                    <i class="fas fa-camera me-2"></i>Capture Image
+                                </button>
+                                <button id="retake-image" class="btn btn-secondary d-none">
+                                    <i class="fas fa-redo me-2"></i>Retake
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Upload Tab -->
+                    <div class="tab-pane fade" id="upload-tab-pane" role="tabpanel" tabindex="0">
+                        <div class="text-center">
+                            <div id="upload-container" class="mb-3">
+                                <img id="upload-preview" class="img-fluid rounded border d-none" style="max-height: 350px; max-width: 100%;" alt="Uploaded plant image">
+                            </div>
+                            <div class="mb-3">
+                                <input class="form-control" type="file" id="upload-input" accept="image/*">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="d-grid gap-2 mt-3">
+                    <button id="detect-disease" class="btn btn-danger btn-lg" disabled>
+                        <i class="fas fa-search me-2"></i>Detect Disease
+                    </button>
+                </div>
+                
+                <div class="alert alert-info mt-3">
+                    <i class="fas fa-info-circle me-2"></i>For best results, capture a clear, well-lit image of the affected plant part (leaves, stems, etc.). Make sure the diseased area is clearly visible.
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-5">
+        <div class="card shadow" id="results-card">
+            <div class="card-header bg-primary text-white">
+                <h4 class="mb-0"><i class="fas fa-search-plus me-2"></i>Detection Results</h4>
+            </div>
+            <div class="card-body" id="results-container">
+                <div class="text-center py-5">
+                    <i class="fas fa-leaf fa-3x text-muted mb-3"></i>
+                    <p>No detection results yet. Capture or upload an image and click "Detect Disease" to analyze.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-12">
+        <div class="card shadow">
+            <div class="card-header bg-success text-white">
+                <h4 class="mb-0"><i class="fas fa-book-medical me-2"></i>Common Plant Diseases</h4>
+            </div>
+            <div class="card-body">
+                <div class="row row-cols-1 row-cols-md-3 g-4">
+                    <div class="col">
+                        <div class="card h-100 border-0 shadow-sm">
+                            <img src="https://pixabay.com/get/gfeb871f6bd220487166d4178db039891f4d1c31d7b4419263e2896afa1203ae29abcf98ab64078916d07886d6c98a98f3190680a5302008a5c03be10f196df9d_1280.jpg" 
+                                 class="card-img-top" alt="Powdery Mildew">
+                            <div class="card-body">
+                                <h5 class="card-title">Powdery Mildew</h5>
+                                <p class="card-text">A fungal disease that appears as white powdery spots on the leaves and stems of infected plants.</p>
+                                <p><strong>Treatment:</strong> Apply fungicides containing sulfur or potassium bicarbonate. Ensure good air circulation around plants.</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col">
+                        <div class="card h-100 border-0 shadow-sm">
+                            <img src="https://pixabay.com/get/gbb02ef38793128fca730cdf017eff0c6b7444c03be458d4d98712c41656bfe1268864cb2ebebcfd66a64a8ae351dc5afe171bbb72894b0720537be8eefbb1e12_1280.jpg" 
+                                 class="card-img-top" alt="Leaf Spot">
+                            <div class="card-body">
+                                <h5 class="card-title">Leaf Spot Diseases</h5>
+                                <p class="card-text">Various fungal and bacterial diseases characterized by spots on leaves that can vary in size and color.</p>
+                                <p><strong>Treatment:</strong> Remove infected leaves, apply appropriate fungicide, and avoid overhead watering.</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col">
+                        <div class="card h-100 border-0 shadow-sm">
+                            <img src="https://pixabay.com/get/gd40dfedd84b760c8dec4e975e2c0b663676b69ccab36881ec4fd7b24b65c5ace9bd356889a3a773f46a99500d81a2d81f6daaabc7f72b86ae10424314c9dda12_1280.jpg" 
+                                 class="card-img-top" alt="Late Blight">
+                            <div class="card-body">
+                                <h5 class="card-title">Late Blight</h5>
+                                <p class="card-text">A serious disease affecting potatoes and tomatoes, causing dark lesions on leaves and stems.</p>
+                                <p><strong>Treatment:</strong> Apply copper-based fungicides preventatively. Remove and destroy infected plants promptly.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/camera.js') }}"></script>
+<script src="{{ url_for('static', filename='models/disease_detection_model.js') }}"></script>
+<script src="{{ url_for('static', filename='data/disease_data.js') }}"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // DOM Elements
+        const startCameraBtn = document.getElementById('start-camera');
+        const captureImageBtn = document.getElementById('capture-image');
+        const retakeImageBtn = document.getElementById('retake-image');
+        const detectDiseaseBtn = document.getElementById('detect-disease');
+        const cameraPreview = document.getElementById('camera-preview');
+        const cameraCanvas = document.getElementById('camera-canvas');
+        const uploadInput = document.getElementById('upload-input');
+        const uploadPreview = document.getElementById('upload-preview');
+        const resultsContainer = document.getElementById('results-container');
+        
+        // State variables
+        let currentImage = null;
+        let stream = null;
+        let isUsingCamera = true;
+        
+        // Event listeners
+        startCameraBtn.addEventListener('click', startCamera);
+        captureImageBtn.addEventListener('click', captureImage);
+        retakeImageBtn.addEventListener('click', retakeImage);
+        detectDiseaseBtn.addEventListener('click', detectDisease);
+        uploadInput.addEventListener('change', handleImageUpload);
+        
+        // Tab change event
+        document.getElementById('camera-tab').addEventListener('click', function() {
+            isUsingCamera = true;
+            updateDetectButton();
+        });
+        
+        document.getElementById('upload-tab').addEventListener('click', function() {
+            isUsingCamera = false;
+            updateDetectButton();
+        });
+        
+        // Functions
+        function startCamera() {
+            if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+                navigator.mediaDevices.getUserMedia({ video: true })
+                    .then(function(mediaStream) {
+                        stream = mediaStream;
+                        cameraPreview.srcObject = mediaStream;
+                        cameraPreview.play();
+                        
+                        startCameraBtn.classList.add('d-none');
+                        captureImageBtn.classList.remove('d-none');
+                        
+                        updateDetectButton();
+                    })
+                    .catch(function(error) {
+                        console.error('Error accessing camera:', error);
+                        alert('Unable to access camera. Please check your camera permissions.');
+                    });
+            } else {
+                alert('Your browser does not support camera access. Please try the upload option.');
+            }
+        }
+        
+        function captureImage() {
+            if (!stream) return;
+            
+            const context = cameraCanvas.getContext('2d');
+            
+            // Set canvas dimensions to match the video
+            cameraCanvas.width = cameraPreview.videoWidth;
+            cameraCanvas.height = cameraPreview.videoHeight;
+            
+            // Draw the current video frame to the canvas
+            context.drawImage(cameraPreview, 0, 0, cameraCanvas.width, cameraCanvas.height);
+            
+            // Convert canvas to image data URL
+            currentImage = cameraCanvas.toDataURL('image/png');
+            
+            // Show captured image
+            cameraPreview.classList.add('d-none');
+            cameraCanvas.classList.remove('d-none');
+            
+            // Update buttons
+            captureImageBtn.classList.add('d-none');
+            retakeImageBtn.classList.remove('d-none');
+            
+            updateDetectButton();
+        }
+        
+        function retakeImage() {
+            currentImage = null;
+            
+            // Show video preview again
+            cameraPreview.classList.remove('d-none');
+            cameraCanvas.classList.add('d-none');
+            
+            // Update buttons
+            retakeImageBtn.classList.add('d-none');
+            captureImageBtn.classList.remove('d-none');
+            
+            updateDetectButton();
+        }
+        
+        function handleImageUpload(event) {
+            const file = event.target.files[0];
+            
+            if (file) {
+                const reader = new FileReader();
+                
+                reader.onload = function(e) {
+                    uploadPreview.src = e.target.result;
+                    uploadPreview.classList.remove('d-none');
+                    currentImage = e.target.result;
+                    
+                    updateDetectButton();
+                };
+                
+                reader.readAsDataURL(file);
+            }
+        }
+        
+        function updateDetectButton() {
+            if ((isUsingCamera && currentImage) || (!isUsingCamera && uploadPreview.src && !uploadPreview.classList.contains('d-none'))) {
+                detectDiseaseBtn.disabled = false;
+            } else {
+                detectDiseaseBtn.disabled = true;
+            }
+        }
+        
+        function detectDisease() {
+            // Show loading state
+            resultsContainer.innerHTML = `
+                <div class="text-center py-5">
+                    <div class="spinner-border text-primary" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                    <p class="mt-3">Analyzing image...</p>
+                </div>
+            `;
+            
+            // In a real app, we would send the image to a server or use a local ML model
+            // For now, we'll simulate detection with a timeout
+            setTimeout(() => {
+                // Sample detection result
+                const detectionResult = {
+                    disease: "Late Blight",
+                    confidence: 87,
+                    description: "Late blight is a devastating disease of potato and tomato caused by the fungus-like oomycete pathogen Phytophthora infestans.",
+                    symptoms: [
+                        "Brown-black lesions on leaves and stems",
+                        "White fungal growth on underside of leaves in humid conditions",
+                        "Rapid wilting and death of affected tissues",
+                        "Infected potato tubers show copper-brown, granular dry rot"
+                    ],
+                    treatment: [
+                        "Remove and destroy all infected plant parts",
+                        "Apply copper-based fungicides as a preventative measure",
+                        "Ensure good air circulation by proper spacing",
+                        "Avoid overhead irrigation which promotes leaf wetness",
+                        "Use resistant varieties when available"
+                    ],
+                    image: "https://pixabay.com/get/gd40dfedd84b760c8dec4e975e2c0b663676b69ccab36881ec4fd7b24b65c5ace9bd356889a3a773f46a99500d81a2d81f6daaabc7f72b86ae10424314c9dda12_1280.jpg"
+                };
+                
+                displayDetectionResults(detectionResult);
+            }, 2000);
+        }
+        
+        function displayDetectionResults(result) {
+            resultsContainer.innerHTML = `
+                <div class="text-center mb-3">
+                    <img src="${result.image}" class="img-fluid rounded" style="max-height: 150px;" alt="${result.disease}">
+                </div>
+                <div class="text-center mb-3">
+                    <h4>${result.disease}</h4>
+                    <div class="progress mt-2" style="height: 20px;">
+                        <div class="progress-bar bg-success" role="progressbar" style="width: ${result.confidence}%;" 
+                            aria-valuenow="${result.confidence}" aria-valuemin="0" aria-valuemax="100">
+                            ${result.confidence}% Confidence
+                        </div>
+                    </div>
+                </div>
+                <p>${result.description}</p>
+                
+                <h5 class="border-bottom pb-2 mt-4 mb-3">Symptoms</h5>
+                <ul>
+                    ${result.symptoms.map(symptom => `<li>${symptom}</li>`).join('')}
+                </ul>
+                
+                <h5 class="border-bottom pb-2 mt-4 mb-3">Treatment</h5>
+                <ul>
+                    ${result.treatment.map(treatment => `<li>${treatment}</li>`).join('')}
+                </ul>
+                
+                <div class="d-grid gap-2 mt-4">
+                    <button class="btn btn-primary" id="save-result-btn">
+                        <i class="fas fa-save me-2"></i>Save Result
+                    </button>
+                </div>
+            `;
+            
+            // Add event listener for save button
+            document.getElementById('save-result-btn').addEventListener('click', function() {
+                // In a real app, we would save to IndexedDB here
+                alert('Result saved successfully!');
+            });
+        }
+    });
+</script>
+{% endblock %}

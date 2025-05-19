@@ -1,0 +1,123 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card bg-primary-subtle border-0 shadow">
+            <div class="card-body">
+                <div class="d-flex align-items-center">
+                    <div>
+                        <h2 class="display-6">Welcome, {{ current_user.username }}!</h2>
+                        <p class="lead">What would you like to do today?</p>
+                    </div>
+                    <img src="https://pixabay.com/get/g15376b072d7e6c8bda571d3ac2a2ee248a05dc2daa38e987bd2473d7fb0fcf6982f5d634c4eefb6377f07e4bab8aa9b6ba611b5e3afbc10db7c0b1b51f35ac03_1280.jpg" 
+                         alt="Farming" class="img-fluid rounded ms-auto" style="max-width: 200px;">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4">
+    <!-- Soil Test Card -->
+    <div class="col-md-6 col-lg-3">
+        <div class="card h-100 shadow">
+            <img src="https://pixabay.com/get/g5ac3e9c3fbc7fabbbcb13de40bfa94ce5e51fa22ed08c898eba0b02a8d400a34f8b05f21e35c3c993884e8ade36f09f631c1585e4333e97ebb69f55cdd525f3d_1280.jpg" 
+                 class="card-img-top" alt="Soil Testing" style="height: 160px; object-fit: cover;">
+            <div class="card-body">
+                <h5 class="card-title">Soil Test</h5>
+                <p class="card-text">Enter your soil test parameters or upload test results to get crop recommendations.</p>
+            </div>
+            <div class="card-footer bg-transparent border-0">
+                <a href="{{ url_for('soil_test') }}" class="btn btn-primary w-100">
+                    <i class="fas fa-flask me-2"></i>Enter Soil Data
+                </a>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Crop Recommendations Card -->
+    <div class="col-md-6 col-lg-3">
+        <div class="card h-100 shadow">
+            <img src="https://pixabay.com/get/g564c9ce37e679a2bfedb365dfac837af20df0cf3cb001d31d519b72f4c238a573b1e7d1b0f0df97bb3e313f8cf61a21138566e67138820fe461b8cea5bb91a44_1280.jpg" 
+                 class="card-img-top" alt="Crop Recommendations" style="height: 160px; object-fit: cover;">
+            <div class="card-body">
+                <h5 class="card-title">Crop Recommendations</h5>
+                <p class="card-text">View recommended crops based on your soil test data and land location.</p>
+            </div>
+            <div class="card-footer bg-transparent border-0">
+                <a href="{{ url_for('crop_recommendations') }}" class="btn btn-success w-100">
+                    <i class="fas fa-seedling me-2"></i>View Recommendations
+                </a>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Disease Detection Card -->
+    <div class="col-md-6 col-lg-3">
+        <div class="card h-100 shadow">
+            <img src="https://pixabay.com/get/g0e5c9b083be3cb779122fbf3b8d85f2b0fcc46f249645fc1bff78fea17bc3f8c4aa40c5eab21191b6cd46bc50b381027a4f1eeba94e7eea04dc7d916ea818ba3_1280.jpg" 
+                 class="card-img-top" alt="Disease Detection" style="height: 160px; object-fit: cover;">
+            <div class="card-body">
+                <h5 class="card-title">Disease Detection</h5>
+                <p class="card-text">Use your camera or upload images to detect plant diseases and get treatment advice.</p>
+            </div>
+            <div class="card-footer bg-transparent border-0">
+                <a href="{{ url_for('disease_detection') }}" class="btn btn-danger w-100">
+                    <i class="fas fa-bug me-2"></i>Detect Diseases
+                </a>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Chatbot Card -->
+    <div class="col-md-6 col-lg-3">
+        <div class="card h-100 shadow">
+            <img src="https://pixabay.com/get/gb9729c9fc678a8678f7b8c27db605ede28adcf313846ae536ab174e58adb97292c2040209fa0120e53e2e8bb38e4a9f3d61d4211656fda9b0228c774a12bdd84_1280.jpg" 
+                 class="card-img-top" alt="Chatbot" style="height: 160px; object-fit: cover;">
+            <div class="card-body">
+                <h5 class="card-title">Farming Assistant</h5>
+                <p class="card-text">Ask questions about farming processes, crop care, and agricultural practices.</p>
+            </div>
+            <div class="card-footer bg-transparent border-0">
+                <a href="{{ url_for('chatbot') }}" class="btn btn-info text-white w-100">
+                    <i class="fas fa-robot me-2"></i>Ask Assistant
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-5">
+    <div class="col-12">
+        <div class="card shadow">
+            <div class="card-header bg-success text-white">
+                <h4 class="mb-0"><i class="fas fa-chart-line me-2"></i>Recent Activity</h4>
+            </div>
+            <div class="card-body" id="recent-activity">
+                <div id="activity-loading" class="text-center py-3">
+                    <p class="text-muted">Loading your recent activity...</p>
+                </div>
+                <div id="activity-empty" class="text-center py-3 d-none">
+                    <p class="text-muted">No recent activity found. Start by submitting soil test data or using the disease detection tool.</p>
+                </div>
+                <div id="activity-list" class="d-none">
+                    <!-- Activity items will be populated by JavaScript -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Load recent activity from IndexedDB
+        setTimeout(() => {
+            document.getElementById('activity-loading').classList.add('d-none');
+            document.getElementById('activity-empty').classList.remove('d-none');
+        }, 1000);
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,297 @@
+/**
+ * Custom CSS for AgroAssist application
+ * Contains styles for specific components and override of bootstrap styles
+ */
+
+/* General Styles */
+:root {
+    --primary-green: #28a745;
+    --secondary-green: #20c997;
+    --soil-brown: #8b6d41;
+    --crop-wheat: #f0e68c;
+    --warning-yellow: #ffc107;
+    --danger-red: #dc3545;
+}
+
+body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+main {
+    flex: 1;
+    padding-bottom: 2rem;
+}
+
+/* Footer always at bottom */
+.footer {
+    margin-top: auto;
+}
+
+/* Offline indicator */
+.offline-indicator {
+    position: sticky;
+    top: 0;
+    z-index: 1080;
+    width: 100%;
+    margin-bottom: 0;
+    text-align: center;
+    font-weight: 500;
+    border-radius: 0;
+}
+
+/* Card hover effects */
+.dashboard-card {
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.dashboard-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2) !important;
+}
+
+/* Notification toast */
+.notification-toast {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    min-width: 250px;
+    z-index: 1090;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.3s, transform 0.3s;
+}
+
+.notification-toast.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Crop Recommendation Styles */
+.crop-score-badge {
+    width: 40px;
+    height: 40px;
+    background-color: var(--primary-green);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+}
+
+.timeline {
+    position: relative;
+    padding-left: 30px;
+}
+
+.timeline-item {
+    position: relative;
+    padding-bottom: 20px;
+}
+
+.timeline::before {
+    content: '';
+    position: absolute;
+    left: 10px;
+    top: 0;
+    height: 100%;
+    width: 2px;
+    background-color: #dee2e6;
+}
+
+.timeline-marker {
+    position: absolute;
+    left: -30px;
+    top: 0;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    text-align: center;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.timeline-content {
+    border-left: 2px solid #f8f9fa;
+    padding-left: 15px;
+}
+
+/* Chatbot Styles */
+.avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+}
+
+.avatar-bot {
+    background-color: #0dcaf0;
+}
+
+.avatar-user {
+    background-color: #6c757d;
+}
+
+.message {
+    padding: 10px 15px;
+    border-radius: 10px;
+    max-width: 80%;
+}
+
+.message p {
+    margin-bottom: 0.5rem;
+}
+
+.message p:last-child {
+    margin-bottom: 0;
+}
+
+.message-bot {
+    background-color: #f8f9fa;
+}
+
+.message-user {
+    background-color: #e9ecef;
+    margin-left: auto;
+}
+
+/* Disease Detection Styles */
+.capture-frame {
+    border: 2px dashed #dee2e6;
+    border-radius: 8px;
+    padding: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 300px;
+}
+
+.camera-control-btn {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.camera-capture-btn {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background-color: var(--danger-red);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 3px solid white;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+/* Soil Test Form Styles */
+.soil-parameter-card {
+    transition: background-color 0.2s;
+}
+
+.soil-parameter-card:hover {
+    background-color: rgba(40, 167, 69, 0.1);
+}
+
+.nutrient-badge {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: bold;
+    font-size: 0.9rem;
+    margin-right: 10px;
+}
+
+.nutrient-badge-N {
+    background-color: #28a745;
+}
+
+.nutrient-badge-P {
+    background-color: #fd7e14;
+}
+
+.nutrient-badge-K {
+    background-color: #6610f2;
+}
+
+.nutrient-badge-pH {
+    background-color: #20c997;
+}
+
+/* Form Validation Styles */
+.was-validated .form-control:valid,
+.form-control.is-valid {
+    border-color: var(--primary-green);
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8'%3e%3cpath fill='%2328a745' d='M2.3 6.73L.6 4.53c-.4-1.04.46-1.4 1.1-.8l1.1 1.4 3.4-3.8c.6-.63 1.6-.27 1.2.7l-4 4.6c-.43.5-.8.4-1.1.1z'/%3e%3c/svg%3e");
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .crop-score-badge {
+        width: 32px;
+        height: 32px;
+    }
+    
+    .message {
+        max-width: 90%;
+    }
+    
+    .timeline {
+        padding-left: 20px;
+    }
+    
+    .timeline-marker {
+        left: -20px;
+        width: 20px;
+        height: 20px;
+        font-size: 0.8rem;
+    }
+}
+
+/* Print styles for PDF generation */
+@media print {
+    body {
+        background-color: white;
+        color: black;
+    }
+    
+    .navbar, .footer, button, .no-print {
+        display: none !important;
+    }
+    
+    .container {
+        width: 100%;
+        max-width: 100%;
+        padding: 0;
+        margin: 0;
+    }
+    
+    .card {
+        border: 1px solid #ddd;
+        box-shadow: none !important;
+    }
+    
+    .card-header {
+        background-color: #f8f9fa !important;
+        color: #212529 !important;
+    }
+    
+    h1, h2, h3, h4, h5, h6 {
+        color: #212529 !important;
+    }
+}

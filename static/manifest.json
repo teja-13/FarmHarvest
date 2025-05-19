@@ -1,0 +1,41 @@
+{
+  "name": "AgroAssist",
+  "short_name": "AgroAssist",
+  "description": "Smart farming solution for crop recommendations and disease detection",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#343a40",
+  "theme_color": "#28a745",
+  "icons": [
+    {
+      "src": "/static/icons/icon-192.svg",
+      "type": "image/svg+xml",
+      "sizes": "192x192"
+    },
+    {
+      "src": "/static/icons/icon-512.svg",
+      "type": "image/svg+xml",
+      "sizes": "512x512"
+    }
+  ],
+  "orientation": "any",
+  "categories": ["agriculture", "tools", "utilities"],
+  "screenshots": [],
+  "shortcuts": [
+    {
+      "name": "Soil Test",
+      "url": "/soil-test",
+      "description": "Enter soil test data"
+    },
+    {
+      "name": "Disease Detection",
+      "url": "/disease-detection",
+      "description": "Detect plant diseases"
+    }
+  ],
+  "related_applications": [],
+  "prefer_related_applications": false,
+  "dir": "ltr",
+  "lang": "en-US",
+  "offline_enabled": true
+}
