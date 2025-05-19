@@ -1,1 +1,8 @@
-[]
+[
+    {
+        "id": "5d993f23-9778-4b7b-9051-b2125a6bca92",
+        "username": "teja72025",
+        "email": "teja72025@gmail.com",
+        "password_hash": "scrypt:32768:8:1$JkcBw2vtOZCnENcs$452636616a7095e89a579ca82d5b92b3e5f6168f55b15807cf1d46a281c1b4449863a0e0cdc0235a8592184db6f2f081542e4109c3ebf11c7b9a7d2a653dde14"
+    }
+]
