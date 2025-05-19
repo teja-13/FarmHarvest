@@ -4,7 +4,6 @@ Routes for machine learning-powered features in AgroAssist
 import os
 import json
 import sys
-import importlib.util
 from flask import Blueprint, request, jsonify, current_app
 from werkzeug.utils import secure_filename
 
@@ -126,13 +125,17 @@ ml_routes = Blueprint('ml_routes', __name__)
 def recommend_crops():
     """API endpoint for crop recommendations based on soil data."""
     try:
-        # Get soil data from request
         soil_data = request.json
-        
         if not soil_data:
             return jsonify({"error": "No soil data provided"}), 400
         
-        # Get crop recommendations
+        # Validate the input data
+        required_fields = ['N', 'P', 'K', 'ph']
+        for field in required_fields:
+            if field not in soil_data:
+                return jsonify({"error": f"Missing required field: {field}"}), 400
+        
+        # Get recommendations from the ML controller
         recommendations = MLController.get_crop_recommendations(soil_data)
         
         return jsonify({"recommendations": recommendations})
