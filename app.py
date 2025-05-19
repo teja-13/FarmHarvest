@@ -166,6 +166,11 @@ def soil_test():
 def crop_recommendations():
     return render_template('crop_recommendations.html')
 
+@app.route('/all-crops')
+@login_required
+def all_crops():
+    return render_template('all_crops.html')
+
 @app.route('/disease-detection')
 @login_required
 def disease_detection():
