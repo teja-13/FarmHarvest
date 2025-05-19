@@ -502,13 +502,13 @@
                                     </div>
                                     <div class="card-body">
                                         <div class="mb-2">
-                                            <strong>Nitrogen:</strong> ${Math.round(crop.requirements.nitrogen * 100)}% of maximum
+                                            <strong>Nitrogen:</strong> ${Math.round((crop.requirements.nitrogen || crop.requirements.N || 0.5) * 100)}% of maximum
                                         </div>
                                         <div class="mb-2">
-                                            <strong>Phosphorus:</strong> ${Math.round(crop.requirements.phosphorus * 100)}% of maximum
+                                            <strong>Phosphorus:</strong> ${Math.round((crop.requirements.phosphorus || crop.requirements.P || 0.5) * 100)}% of maximum
                                         </div>
                                         <div class="mb-2">
-                                            <strong>Potassium:</strong> ${Math.round(crop.requirements.potassium * 100)}% of maximum
+                                            <strong>Potassium:</strong> ${Math.round((crop.requirements.potassium || crop.requirements.K || 0.5) * 100)}% of maximum
                                         </div>
                                         <div class="mb-2">
                                             <strong>pH Range:</strong> ${crop.requirements.phRange ? crop.requirements.phRange.join(' - ') : 'Not specified'}
@@ -696,19 +696,22 @@
             const improvements = [];
             
             // Check nitrogen levels
-            if (soilData.nitrogen < 40) {
+            const N = Number(soilData.N || 0);
+            if (N < 40) {
                 improvements.push("Apply nitrogen fertilizer: Add 40-60 kg/ha of nitrogen. Consider using a combination of fast-acting and slow-release fertilizers.");
-            } else if (soilData.nitrogen > 120) {
+            } else if (N > 120) {
                 improvements.push("Reduce nitrogen inputs: Your soil has high nitrogen levels. Consider planting nitrogen-hungry crops or adding carbon-rich materials to balance the C:N ratio.");
             }
             
             // Check phosphorus levels
-            if (soilData.phosphorus < 20) {
+            const P = Number(soilData.P || 0);
+            if (P < 20) {
                 improvements.push("Increase phosphorus: Apply 30-40 kg/ha of phosphate fertilizer. Rock phosphate or bone meal are good organic options.");
             }
             
             // Check potassium levels
-            if (soilData.potassium < 30) {
+            const K = Number(soilData.K || 0);
+            if (K < 30) {
                 improvements.push("Add potassium: Apply 30-40 kg/ha of potash. Wood ash or potassium sulfate can be used to increase levels.");
             }
             
