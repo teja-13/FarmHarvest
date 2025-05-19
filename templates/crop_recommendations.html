@@ -731,10 +731,250 @@
         }
         
         function setupEventHandlers(recommendations, soilData) {
+            // Get crop list element
+            const cropList = document.getElementById('crop-list');
+            
+            // Clear existing items
+            cropList.innerHTML = '';
+            
+            // Add recommendations to the list
+            recommendations.forEach((crop, index) => {
+                const cropItem = document.createElement('a');
+                cropItem.href = '#';
+                cropItem.className = 'list-group-item list-group-item-action d-flex justify-content-between align-items-center';
+                cropItem.dataset.index = index;
+                
+                // Set active class for the first item
+                if (index === 0) {
+                    cropItem.classList.add('active');
+                    // Display the first crop's details
+                    displayCropDetails(crop);
+                }
+                
+                cropItem.innerHTML = `
+                    <div>
+                        <h5 class="mb-1">${crop.name}</h5>
+                        <p class="mb-1 text-muted small">${crop.description.substring(0, 60)}...</p>
+                    </div>
+                    <span class="badge bg-success rounded-pill">${crop.score}%</span>
+                `;
+                
+                // Add click event listener to display crop details
+                cropItem.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    // Remove active class from all items
+                    cropList.querySelectorAll('a').forEach(item => {
+                        item.classList.remove('active');
+                    });
+                    
+                    // Add active class to clicked item
+                    this.classList.add('active');
+                    
+                    // Get the crop index from the data attribute
+                    const cropIndex = parseInt(this.dataset.index);
+                    
+                    // Display the selected crop's details
+                    displayCropDetails(recommendations[cropIndex]);
+                });
+                
+                cropList.appendChild(cropItem);
+            });
+            
             // Setup PDF download button
             document.getElementById('download-pdf').addEventListener('click', function() {
-                generatePDF(recommendations[0], soilData);
+                // Get the active crop
+                const activeIndex = parseInt(document.querySelector('#crop-list a.active').dataset.index);
+                generatePDF(recommendations[activeIndex], soilData);
             });
+        }
+        
+        function displayCropDetails(crop) {
+            const cropDetails = document.getElementById('crop-details');
+            const selectedCropTitle = document.getElementById('selected-crop-title');
+            
+            // Update the title
+            selectedCropTitle.textContent = crop.name;
+            
+            // Prepare storage and crop rotation sections if available
+            const storageHtml = crop.process.storage ? `
+                <div class="timeline-item">
+                    <div class="timeline-marker bg-info">
+                        <i class="fas fa-warehouse"></i>
+                    </div>
+                    <div class="timeline-content">
+                        <h5>Storage</h5>
+                        <p>${crop.process.storage}</p>
+                    </div>
+                </div>
+            ` : '';
+            
+            const cropRotationHtml = crop.process.cropRotation ? `
+                <div class="timeline-item">
+                    <div class="timeline-marker bg-secondary">
+                        <i class="fas fa-sync-alt"></i>
+                    </div>
+                    <div class="timeline-content">
+                        <h5>Crop Rotation</h5>
+                        <p>${crop.process.cropRotation}</p>
+                    </div>
+                </div>
+            ` : '';
+            
+            // Update the details section
+            cropDetails.innerHTML = `
+                <div class="row mb-4">
+                    <div class="col-md-4">
+                        <img src="${crop.image}" alt="${crop.name}" class="img-fluid rounded">
+                    </div>
+                    <div class="col-md-8">
+                        <h4>${crop.name}</h4>
+                        <div class="d-flex align-items-center mb-2">
+                            <div class="me-3">
+                                <span class="badge bg-success p-2">
+                                    <i class="fas fa-check-circle me-1"></i>${crop.score}% Match
+                                </span>
+                            </div>
+                            <div class="progress flex-grow-1" style="height: 8px;">
+                                <div class="progress-bar bg-success" role="progressbar" style="width: ${crop.score}%" aria-valuenow="${crop.score}" aria-valuemin="0" aria-valuemax="100"></div>
+                            </div>
+                        </div>
+                        <p>${crop.description}</p>
+                        
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <div class="card h-100">
+                                    <div class="card-header bg-light">
+                                        <h6 class="mb-0">Soil Requirements</h6>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="mb-2">
+                                            <strong>Nitrogen:</strong> ${Math.round((crop.requirements?.nitrogen || crop.requirements?.N || 0.5) * 100)}% of maximum
+                                        </div>
+                                        <div class="mb-2">
+                                            <strong>Phosphorus:</strong> ${Math.round((crop.requirements?.phosphorus || crop.requirements?.P || 0.5) * 100)}% of maximum
+                                        </div>
+                                        <div class="mb-2">
+                                            <strong>Potassium:</strong> ${Math.round((crop.requirements?.potassium || crop.requirements?.K || 0.5) * 100)}% of maximum
+                                        </div>
+                                        <div class="mb-2">
+                                            <strong>pH Range:</strong> ${crop.requirements?.phRange ? crop.requirements.phRange.join(' - ') : '6.0 - 7.0'}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="card h-100">
+                                    <div class="card-header bg-light">
+                                        <h6 class="mb-0">Growing Season</h6>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="mb-2">
+                                            <strong>Planting Time:</strong> ${crop.season?.planting || 'Spring'}
+                                        </div>
+                                        <div class="mb-2">
+                                            <strong>Harvest Time:</strong> ${crop.season?.harvest || 'Fall'}
+                                        </div>
+                                        <div class="mb-2">
+                                            <strong>Growth Duration:</strong> ${crop.season?.growthDuration || '90-120 days'}
+                                        </div>
+                                        <div class="mb-2">
+                                            <strong>Climate:</strong> ${crop.season?.climate || 'Temperate'}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <h5 class="border-bottom pb-2 mb-3">Growing Process</h5>
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <div class="timeline-marker bg-primary">
+                            <i class="fas fa-seedling"></i>
+                        </div>
+                        <div class="timeline-content">
+                            <h5>Seed Selection</h5>
+                            <p>${crop.process.seedSelection}</p>
+                        </div>
+                    </div>
+                    
+                    <div class="timeline-item">
+                        <div class="timeline-marker bg-success">
+                            <i class="fas fa-tractor"></i>
+                        </div>
+                        <div class="timeline-content">
+                            <h5>Land Preparation</h5>
+                            <p>${crop.process.landPreparation}</p>
+                        </div>
+                    </div>
+                    
+                    <div class="timeline-item">
+                        <div class="timeline-marker bg-info">
+                            <i class="fas fa-hand-holding-medical"></i>
+                        </div>
+                        <div class="timeline-content">
+                            <h5>Planting</h5>
+                            <p>${crop.process.planting}</p>
+                        </div>
+                    </div>
+                    
+                    <div class="timeline-item">
+                        <div class="timeline-marker bg-primary">
+                            <i class="fas fa-tint"></i>
+                        </div>
+                        <div class="timeline-content">
+                            <h5>Irrigation</h5>
+                            <p>${crop.process.irrigation}</p>
+                        </div>
+                    </div>
+                    
+                    <div class="timeline-item">
+                        <div class="timeline-marker bg-warning">
+                            <i class="fas fa-flask"></i>
+                        </div>
+                        <div class="timeline-content">
+                            <h5>Fertilization</h5>
+                            <p>${crop.process.fertilization}</p>
+                        </div>
+                    </div>
+                    
+                    <div class="timeline-item">
+                        <div class="timeline-marker bg-danger">
+                            <i class="fas fa-bug"></i>
+                        </div>
+                        <div class="timeline-content">
+                            <h5>Pest Control</h5>
+                            <p>${crop.process.pestControl}</p>
+                        </div>
+                    </div>
+                    
+                    <div class="timeline-item">
+                        <div class="timeline-marker bg-primary">
+                            <i class="fas fa-shield-alt"></i>
+                        </div>
+                        <div class="timeline-content">
+                            <h5>Disease Management</h5>
+                            <p>${crop.process.diseaseManagement}</p>
+                        </div>
+                    </div>
+                    
+                    <div class="timeline-item">
+                        <div class="timeline-marker bg-success">
+                            <i class="fas fa-cut"></i>
+                        </div>
+                        <div class="timeline-content">
+                            <h5>Harvesting</h5>
+                            <p>${crop.process.harvesting}</p>
+                        </div>
+                    </div>
+                    
+                    ${storageHtml}
+                    
+                    ${cropRotationHtml}
+                </div>
+            `;
         }
         
         function generatePDF(crop, soilData) {
