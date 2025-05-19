@@ -105,9 +105,45 @@
     </div>
 </div>
 
-<div class="row mt-5">
-    <div class="col-12">
-        <div class="card shadow">
+<div class="row g-4 mt-4">
+    <div class="col-md-6">
+        <div class="card h-100 shadow border-warning">
+            <div class="card-header bg-warning text-dark">
+                <h4 class="mb-0"><i class="fas fa-book me-2"></i>Agricultural Resources</h4>
+            </div>
+            <div class="card-body">
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <div class="card h-100">
+                            <div class="card-body text-center">
+                                <i class="fas fa-globe text-success fa-3x mb-3"></i>
+                                <h5>Global Crop Encyclopedia</h5>
+                                <p class="small">Comprehensive information about crops from around the world</p>
+                                <a href="{{ url_for('all_crops') }}" class="btn btn-outline-success btn-sm mt-2">
+                                    <i class="fas fa-leaf me-1"></i>Browse All Crops
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card h-100">
+                            <div class="card-body text-center">
+                                <i class="fas fa-map-marked-alt text-danger fa-3x mb-3"></i>
+                                <h5>Indian Crops & Diseases</h5>
+                                <p class="small">Specialized information for crops grown in the Indian subcontinent</p>
+                                <a href="{{ url_for('indian_crops') }}" class="btn btn-outline-danger btn-sm mt-2">
+                                    <i class="fas fa-seedling me-1"></i>View Indian Crops
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-6">
+        <div class="card h-100 shadow">
             <div class="card-header bg-success text-white">
                 <h4 class="mb-0"><i class="fas fa-chart-line me-2"></i>Recent Activity</h4>
             </div>

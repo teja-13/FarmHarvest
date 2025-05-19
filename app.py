@@ -170,6 +170,11 @@ def crop_recommendations():
 @login_required
 def all_crops():
     return render_template('all_crops.html')
+    
+@app.route('/indian-crops')
+@login_required
+def indian_crops():
+    return render_template('indian_crops.html')
 
 @app.route('/disease-detection')
 @login_required
