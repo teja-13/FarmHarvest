@@ -4,5 +4,11 @@
         "username": "teja72025",
         "email": "teja72025@gmail.com",
         "password_hash": "scrypt:32768:8:1$JkcBw2vtOZCnENcs$452636616a7095e89a579ca82d5b92b3e5f6168f55b15807cf1d46a281c1b4449863a0e0cdc0235a8592184db6f2f081542e4109c3ebf11c7b9a7d2a653dde14"
+    },
+    {
+        "id": "26020bcd-6862-49fc-accf-9d4d392446c3",
+        "username": "uma",
+        "email": "umachandra4821@gmail.com",
+        "password_hash": "scrypt:32768:8:1$xoZMj9zVtaVaHQPB$003eb91ce17f7d187ac823b48bc9ee434835efaa9db7f8050dd812c33dfd1408eef71dd8b20c1481cbeae995af5b9438d89714b408a023da714ea01b3620f209"
     }
 ]
